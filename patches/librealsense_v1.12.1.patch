@@ -1,0 +1,241 @@
+diff --git a/src/archive.cpp b/src/archive.cpp
+index 211342bc..9b28e4bd 100644
+--- a/src/archive.cpp
++++ b/src/archive.cpp
+@@ -1,4 +1,4 @@
+-
++#include <functional>
+ #include "archive.h"
+ #include <algorithm>
+ 
+diff --git a/src/context.cpp b/src/context.cpp
+index ba5a712f..467ebc79 100644
+--- a/src/context.cpp
++++ b/src/context.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include <mutex>
+ #include <array>
+ #include <string>
+diff --git a/src/device.cpp b/src/device.cpp
+index 2194769e..0fa25962 100644
+--- a/src/device.cpp
++++ b/src/device.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include "device.h"
+ #include "sync.h"
+ #include "motion-module.h"
+diff --git a/src/ds-device.cpp b/src/ds-device.cpp
+index 1b29ac77..08f9f52b 100644
+--- a/src/ds-device.cpp
++++ b/src/ds-device.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2016 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include <climits>
+ #include <algorithm>
+ #include <iomanip>      // for std::put_time
+diff --git a/src/ds-private.cpp b/src/ds-private.cpp
+index 964cd4bd..36bc8dd8 100644
+--- a/src/ds-private.cpp
++++ b/src/ds-private.cpp
+@@ -1,5 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2016 Intel Corporation. All Rights Reserved.
++#include <functional>
+ #include <iomanip>      // for std::put_time
+ 
+ #include "hw-monitor.h"
+diff --git a/src/f200.cpp b/src/f200.cpp
+index edfd256e..c35223f3 100644
+--- a/src/f200.cpp
++++ b/src/f200.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #define _USE_MATH_DEFINES
+ #include <math.h>
+ #include <algorithm>
+diff --git a/src/hw-monitor.cpp b/src/hw-monitor.cpp
+index 8dcc0813..c85d82e8 100644
+--- a/src/hw-monitor.cpp
++++ b/src/hw-monitor.cpp
+@@ -1,7 +1,7 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+ 
+-
++#include <functional>
+ #include "hw-monitor.h"
+ 
+ namespace rsimpl
+diff --git a/src/image.cpp b/src/image.cpp
+index 83530e15..d714a06a 100644
+--- a/src/image.cpp
++++ b/src/image.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include "image.h"
+ #include "../include/librealsense/rsutil.h" // For projection/deprojection logic
+ 
+diff --git a/src/ivcam-device.cpp b/src/ivcam-device.cpp
+index 288595bd..3d1ca587 100644
+--- a/src/ivcam-device.cpp
++++ b/src/ivcam-device.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2016 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #define _USE_MATH_DEFINES
+ #include <math.h>
+ #include <limits>
+diff --git a/src/ivcam-private.cpp b/src/ivcam-private.cpp
+index 1fb926dc..1afb6432 100644
+--- a/src/ivcam-private.cpp
++++ b/src/ivcam-private.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include <cstring>
+ #include <algorithm>
+ #include <thread>
+diff --git a/src/log.cpp b/src/log.cpp
+index d60d157f..6f289ef1 100644
+--- a/src/log.cpp
++++ b/src/log.cpp
+@@ -1,3 +1,4 @@
++#include <functional>
+ #include "types.h"
+ 
+ #include <fstream>
+diff --git a/src/motion-module.cpp b/src/motion-module.cpp
+index 283feeb9..c6532bb1 100644
+--- a/src/motion-module.cpp
++++ b/src/motion-module.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include <mutex>
+ #define _USE_MATH_DEFINES
+ #include <math.h>
+diff --git a/src/r200.cpp b/src/r200.cpp
+index 918fbcb0..aa60dec3 100644
+--- a/src/r200.cpp
++++ b/src/r200.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include "image.h"
+ #include "r200.h"
+ 
+diff --git a/src/sr300.cpp b/src/sr300.cpp
+index 85a2b7f7..1c42e8f9 100644
+--- a/src/sr300.cpp
++++ b/src/sr300.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2016 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include <climits>
+ #include <algorithm>
+ 
+diff --git a/src/stream.cpp b/src/stream.cpp
+index 6e3dbe11..843f26de 100644
+--- a/src/stream.cpp
++++ b/src/stream.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include "stream.h"
+ #include "sync.h"       // For frame_archive
+ #include "image.h"      // For image alignment, rectification, and deprojection routines
+diff --git a/src/sync.cpp b/src/sync.cpp
+index ceb6e881..ea487b2a 100644
+--- a/src/sync.cpp
++++ b/src/sync.cpp
+@@ -1,3 +1,4 @@
++#include <functional>
+ #include <cmath>
+ #include "sync.h"
+ 
+diff --git a/src/timestamps.cpp b/src/timestamps.cpp
+index 19905079..59640daa 100644
+--- a/src/timestamps.cpp
++++ b/src/timestamps.cpp
+@@ -1,3 +1,4 @@
++#include <functional>
+ #include "timestamps.h"
+ #include "sync.h"
+ #include <algorithm>
+diff --git a/src/types.cpp b/src/types.cpp
+index f48b9857..366f9221 100644
+--- a/src/types.cpp
++++ b/src/types.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include "types.h"
+ #include "image.h"
+ #include "device.h"
+diff --git a/src/uvc-v4l2.cpp b/src/uvc-v4l2.cpp
+index e97dfdab..ebe3a402 100644
+--- a/src/uvc-v4l2.cpp
++++ b/src/uvc-v4l2.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #ifdef RS_USE_V4L2_BACKEND
+ 
+ #include "uvc.h"
+diff --git a/src/zr300.cpp b/src/zr300.cpp
+index 4c75084b..0ce0014b 100644
+--- a/src/zr300.cpp
++++ b/src/zr300.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #include <climits>
+ #include <algorithm>
+ 
+diff --git a/unit-tests/unit-tests-offline.cpp b/unit-tests/unit-tests-offline.cpp
+index e63767eb..aa899025 100644
+--- a/unit-tests/unit-tests-offline.cpp
++++ b/unit-tests/unit-tests-offline.cpp
+@@ -1,6 +1,6 @@
+ // License: Apache 2.0. See LICENSE file in root directory.
+ // Copyright(c) 2015 Intel Corporation. All Rights Reserved.
+-
++#include <functional>
+ #if !defined(MAKEFILE) || ( defined(OFFLINE_TEST) )
+ 
+ #define CATCH_CONFIG_MAIN
