@@ -1,0 +1,13 @@
+diff --git a/FriendlyELEC_NanoHatMotor/FriendlyELEC_I2C.py b/FriendlyELEC_NanoHatMotor/FriendlyELEC_I2C.py
+index a1d00c2..06d021f 100755
+--- a/FriendlyELEC_NanoHatMotor/FriendlyELEC_I2C.py
++++ b/FriendlyELEC_NanoHatMotor/FriendlyELEC_I2C.py
+@@ -31,7 +31,7 @@ class FriendlyELEC_I2C(object):
+   @staticmethod
+   def getPiI2CBusNumber():
+     # Gets the I2C bus number /dev/i2c#
+-    return 1 if FriendlyELEC_I2C.getPiRevision() > 1 else 0
++    return 2
+ 
+   def __init__(self, address, busnum=-1, debug=False):
+     self.address = address
