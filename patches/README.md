@@ -1,11 +1,19 @@
 # Patches for NanoPI M4
 
 ## uvcvideo
-Patch for Armbian Ubuntu 18.04.2 with dev branch (kernel 5.0.0-rk3399)
+###Patch for Armbian Ubuntu 18.04.2 with dev branch (kernel 5.0.0-rk3399)
 
-`./compile.sh BOARD=nanopim4 BRANCH=dev RELEASE=bionic BUILD_DESKTOP=no KERNEL_ONLY=no KERNEL_CONFIGURE=no INSTALL_HEADERS=yes CLEAN_LEVEL=make,debs`
+Copy patch to `userpatches/kernel/rockchip64-dev/uvcvideo-librealsense-5.0.0-1092-ayufan.patch`
 
-`userpatches/kernel/rockchip64-dev/uvcvideo-librealsense-5.0.0-1092-ayufan.patch`
+Build: `./compile.sh BOARD=nanopim4 BRANCH=dev RELEASE=bionic BUILD_DESKTOP=no KERNEL_ONLY=no KERNEL_CONFIGURE=no INSTALL_HEADERS=yes CLEAN_LEVEL=make,debs`
+
+
+###Patch for Armbian Ubuntu 18.04.2 with default branch (kernel 4.4.176-rk3399)
+
+Copy patch to: `userpatches/kernel/rk3399-default/librealsense_patch_linux-4.4.176-rk3399.patch`
+
+Build: `./compile.sh BOARD=nanopim4 BRANCH=default RELEASE=bionic BUILD_DESKTOP=no KERNEL_ONLY=no KERNEL_CONFIGURE=no INSTALL_HEADERS=yes CLEAN_LEVEL=make,debs`
+
 
 ## librealsense v1.12.1
 `librealsense_v1.12.1.patch`
