@@ -12,6 +12,13 @@ Build: `./compile.sh BOARD=nanopim4 BRANCH=dev RELEASE=bionic BUILD_DESKTOP=no K
 
 Copy patch to: `userpatches/kernel/rk3399-default/librealsense_patch_linux-4.4.176-rk3399.patch`
 
+Enable UVC module in config (TODO howto)
+
+```
+CONFIG_USB_VIDEO_CLASS=m
+CONFIG_USB_VIDEO_CLASS_INPUT_EVDEV=y
+```
+
 Build: `./compile.sh BOARD=nanopim4 BRANCH=default RELEASE=bionic BUILD_DESKTOP=no KERNEL_ONLY=no KERNEL_CONFIGURE=no INSTALL_HEADERS=yes CLEAN_LEVEL=make,debs`
 
 

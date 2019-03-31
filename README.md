@@ -29,3 +29,5 @@ you must install (copy) the libraries into Gstreamer plugins search path. Usuall
 ## librealsense
 Install packages: libglu1-mesa-dev libglfw3-dev libusb-1.0-0-dev pkg-config
 
+Follow [Intel RealSense installation manual](https://github.com/IntelRealSense/librealsense/blob/v1.12.1/doc/installation.md)
+
