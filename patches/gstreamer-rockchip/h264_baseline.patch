@@ -1,0 +1,17 @@
+--- a/gst/rockchipmpp/gstmpph264enc.c
++++ b/gst/rockchipmpp/gstmpph264enc.c
+@@ -134,11 +134,11 @@ gst_mpp_h264_enc_set_format (GstVideoEncoder * encoder,
+   codec_cfg.h264.change = MPP_ENC_H264_CFG_CHANGE_PROFILE |
+       MPP_ENC_H264_CFG_CHANGE_ENTROPY |
+       MPP_ENC_H264_CFG_CHANGE_TRANS_8x8 | MPP_ENC_H264_CFG_CHANGE_QP_LIMIT;
+-  codec_cfg.h264.profile = 100;
++  codec_cfg.h264.profile = 66;
+   codec_cfg.h264.level = 40;
+-  codec_cfg.h264.entropy_coding_mode = 1;
++  codec_cfg.h264.entropy_coding_mode = 0;
+   codec_cfg.h264.cabac_init_idc = 0;
+-  codec_cfg.h264.transform8x8_mode = 1;
++  codec_cfg.h264.transform8x8_mode = 0;
+ 
+   if (mpp_video_enc->mpi->control (mpp_video_enc->mpp_ctx,
+           MPP_ENC_SET_CODEC_CFG, &codec_cfg)) {
