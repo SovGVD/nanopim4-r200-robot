@@ -1,0 +1,260 @@
+<html>
+	<head>
+		<title>nanom4-robor</title>
+		<link rel="stylesheet" href="bootstrap.min.css">
+		<script type="text/javascript" src="Decoder.js"></script>
+		<script type="text/javascript" src="YUVCanvas.js"></script>
+		<script type="text/javascript" src="Player.js"></script>
+		<script type="text/javascript" src="stream.js"></script>
+		<script type="text/javascript" src="mp4.js"></script>
+	</head>
+<body>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-6">
+			<div id="videoFeed"></div>
+		</div>
+	</div>
+</div>
+
+<script>
+
+var FPS=30;
+var ws_video = false;
+var ws_telemetry = false; var telemetry_obj = document.getElementById("telemetryFeed");
+var c,ctx;
+var imgData = false;
+var h264_player = false;
+var h264_decoder = false;
+var kMap = { };
+var stickData = {
+	roll     : 0,
+	pitch    : 0,
+	throttle : 0,
+	yaw      : 0
+};
+var host = window.location.host;
+
+
+function initVideoFeedReceive() {
+	ws_video.send("f");
+}
+
+function initTelemetryFeedReceive() {
+	ws_telemetry.send("t");
+}
+
+
+var toUint8Array = function(parStr){
+	var raw = parStr;
+	var rawLength = raw.length;
+	var array = new Uint8Array(new ArrayBuffer(rawLength));
+
+	var i;
+	for(i = 0; i < rawLength; i++) {
+		array[i] = raw.charCodeAt(i);
+	}
+	return array;    
+};
+
+function processFrame(imgString) {
+	if (imgString.data!='false') {
+		h264_player.decode(toUint8Array(imgString.data));
+	} else {
+		console.log(imgString);
+	}
+}
+
+function processTelemetry(data) {
+	//console.log(data);
+	//telemetry_obj.innerHTML = data.data;
+	//data = JSON.parse(data.data);
+}
+
+function connect() {
+	try {
+		ws_video = new WebSocket("ws://"+host+":8081/");
+		ws_video.onmessage = function (data) {
+			processFrame(data);
+		};
+		ws_video.onopen = function () {
+			initVideoFeedReceive();
+		};
+		ws_video.onerror = function () {
+			ws_video.close();
+		}
+	} catch (e) {
+		console.log("Error","Video", "reconnect");
+	}
+	
+	try {
+		ws_telemetry = new WebSocket("ws://"+host+":8082/");
+		ws_telemetry.onmessage = function (data) {
+			processTelemetry(data);
+		};
+		ws_telemetry.onopen = function () {
+			initTelemetryFeedReceive();
+		};
+		ws_telemetry.onerror = function () {
+			ws_telemetry.close();
+		}
+	} catch (e) {
+		console.log("Error","Telemetry", "reconnect");
+	}
+}
+
+
+function initCanvas() {
+	h264_player = new Player({
+		useWorker : true,
+		workerFile : "Decoder.js",
+		webgl: 'auto',
+		size: { width: 960, height: 720}
+	});
+	document.getElementById("videoFeed").appendChild(h264_player.canvas);
+}
+
+function initKeyboard() {
+	document.body.onkeydown = document.body.onkeyup = function (e) { 
+		e.preventDefault();
+		kMap[e.code] = (e.type=='keydown'?true:false); 
+		keyboardEvent(e);
+	};
+}
+
+
+var speed = 0.5;
+function keyboardEvent(e) {
+	//console.log(kMap);
+	if (kMap.Space === true && (kMap.ShiftLeft === true || kMap.ShiftRight === true)) {
+		kMap.Space = false;
+		sendCmd("takeoff", 0);
+	} else if (kMap.Space === true) {
+		sendCmd("land", 0);
+	}
+	if (kMap.KeyW === true || kMap.KeyA === true || kMap.KeyS === true || kMap.KeyD === true ||
+		kMap.ArrowUp === true || kMap.ArrowDown === true || kMap.ArrowLeft === true || kMap.ArrowRight === true) {
+		
+		stickData.yaw = speed*(kMap.KeyA === true?-1:(kMap.KeyD === true?1:0));
+		stickData.throttle = speed*(kMap.KeyS === true?-1:(kMap.KeyW === true?1:0));
+		stickData.roll = speed*(kMap.ArrowLeft === true?-1:(kMap.ArrowRight === true?1:0));
+		stickData.pitch = speed*(kMap.ArrowDown === true?-1:(kMap.ArrowUp === true?1:0));
+		
+		console.log(stickData);
+		sendCmd("stick", stickData);
+	} else {
+		stickData.yaw = 0;
+		stickData.throttle = 0;
+		stickData.roll = 0;
+		stickData.pitch = 0;
+		console.log(stickData);
+		sendCmd("stick", stickData);
+	}
+	return false;
+}
+
+
+function initUI() {
+}
+
+function initPing() {
+	// ping backend every 0.5 seconds
+	setInterval(
+		function () {
+			sendCmd("ping", 0);
+		},
+		500
+	);
+}
+
+function sendCmd(_cmd, _value) {
+	if (ws_telemetry) {
+		ws_telemetry.send(JSON.stringify({ cmd: { cmd: _cmd, value: _value } }));
+	}
+}
+
+
+var gp = false;	// GamePad object
+var gpInterval = false;
+function initGamepad() {
+	window.addEventListener("gamepadconnected", gamepadConnectHandler);
+	window.addEventListener("gamepaddisconnected", gamepadDisconnectHandler);
+}
+
+function gamepadConnectHandler (e) {
+	gamepadAdd(e.gamepad);
+}
+
+function gamepadDisconnectHandler (e) {
+	gamepadRemove(e.gamepad);
+	sendCmd("stick", {
+		roll     : 0,
+		pitch    : 0,
+		throttle : 0,
+		yaw      : 0
+	});
+}
+
+function gamepadRemove(g) {
+	gp = false;
+}
+
+function gamepadAdd(g) {
+	console.log(g);
+	initGamePadEvents();
+	gp = g;
+}
+
+function initGamePadEvents() {
+	if (gpInterval) {
+		clearInterval(gpInterval);
+		initGamePadEvents();
+	} else {
+		setInterval(function () { gamepadData() }.bind(this), 100);
+	}
+}
+
+function gamepadData() {
+	gp = navigator.getGamepads()[0];
+	// axes mapping
+	/*
+		ax0 - yaw
+		ax1 - trottle
+		ax2 - roll
+		ax3 - pitch
+	*/
+	
+	// buttons (I use SHANWAN PS3/PC Gamepad (Vendor: 2563 Product: 0575))
+	/*
+		button0 - Y - land
+		button1 - B - land
+		button2 - A - land
+		button3 - X - land
+		button9 - start
+	*/
+	
+	if (gp.buttons[0].pressed == true || gp.buttons[1].pressed == true || gp.buttons[2].pressed == true || gp.buttons[3].pressed == true ) {
+		sendCmd("land", 0);
+	} else if (gp.buttons[9].pressed == true) {
+		sendCmd("takeoff", 0);
+	}
+		stickData.yaw = speed*gp.axes[0];
+		stickData.throttle = -speed*gp.axes[1];
+		stickData.roll = speed*gp.axes[2];
+		stickData.pitch = -speed*gp.axes[3];
+		sendCmd("stick", stickData);
+}
+
+
+initUI();
+initKeyboard();
+initGamepad();
+initCanvas();
+//init3D();
+initPing();
+connect();
+
+
+</script>
+</body>
+</html>

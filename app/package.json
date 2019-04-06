@@ -1,0 +1,27 @@
+{
+  "name": "noderover",
+  "version": "0.0.1",
+  "description": "NodeRover based on nanopi m4 with rk3399",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "drone",
+    "rover",
+    "nanopim4",
+    "rk3399",
+    "node.js",
+    "video stream",
+    "h264"
+  ],
+  "author": "Gleb Devyatkin",
+  "license": "MIT",
+  "dependencies": {
+    "ws": "^5.2.1"
+  }
+}
