@@ -39,3 +39,20 @@ Wiring (DON'T USE EXTRA POWER, e.g. USB-C):
 NanoPi M4 (Arbmian Ubuntu 18.04.2) I2C2 is /dev/i2c-2
 
 extremely durty hack `nanopi_m4_nanohat_motor_i2c_bus.patch`
+
+## NanoHAT with node.js
+If you want to use nodejs, you can patch [motor-hat](https://github.com/jcane86/motor-hat):
+```
+diff --git a/lib/index.js b/lib/index.js
+index 8187714..591a7cf 100644
+--- a/lib/index.js
++++ b/lib/index.js
+@@ -211,7 +211,7 @@ module.exports = function MotorHat(opts) {
+    * or in second parameter to callback if callback provided, to enable chaining.
+    */
+   const init = function init(cb) {
+-    const pwmopts = { i2c, address: options.address };
++    const pwmopts = { i2c, address: options.address, busnum: options.busnum };
+     const self = this;
+     pwm = pwmlib(pwmopts);
+```
