@@ -33,7 +33,11 @@ var noderover_webclient = function () {
 	}
 	
 	this.videoSend = function (u) {
-		this._ws_video_client.send(u);
+		try {
+			this._ws_video_client.send(u);
+		} catch (e) {
+			console.log("ERROR1");
+		}
 	}
 	this.h264encoder_in = function (h264chunk) {
 		this.h264encoder.stdin.write(h264chunk);

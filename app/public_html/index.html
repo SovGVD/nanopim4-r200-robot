@@ -33,7 +33,7 @@ var stickData = {
 	throttle : 0,
 	yaw      : 0
 };
-var host = window.location.host;
+var host = window.location.hostname;
 
 
 function initVideoFeedReceive() {
@@ -72,6 +72,7 @@ function processTelemetry(data) {
 }
 
 function connect() {
+	console.log("Connect to", host);
 	try {
 		ws_video = new WebSocket("ws://"+host+":8081/");
 		ws_video.onmessage = function (data) {
@@ -84,10 +85,10 @@ function connect() {
 			ws_video.close();
 		}
 	} catch (e) {
-		console.log("Error","Video", "reconnect");
+		console.log("Error","Video", "reconnect", e);
 	}
 	
-	try {
+	/*try {
 		ws_telemetry = new WebSocket("ws://"+host+":8082/");
 		ws_telemetry.onmessage = function (data) {
 			processTelemetry(data);
@@ -100,7 +101,7 @@ function connect() {
 		}
 	} catch (e) {
 		console.log("Error","Telemetry", "reconnect");
-	}
+	}*/
 }
 
 
@@ -247,11 +248,11 @@ function gamepadData() {
 
 
 initUI();
-initKeyboard();
-initGamepad();
+//initKeyboard();
+//initGamepad();
 initCanvas();
 //init3D();
-initPing();
+//initPing();
 connect();
 
 
