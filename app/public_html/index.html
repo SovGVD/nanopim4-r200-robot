@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
 		<title>nanom4-robor</title>
 		<link rel="stylesheet" href="bootstrap.min.css">
 		<script type="text/javascript" src="Decoder.js"></script>
@@ -7,12 +8,23 @@
 		<script type="text/javascript" src="Player.js"></script>
 		<script type="text/javascript" src="stream.js"></script>
 		<script type="text/javascript" src="mp4.js"></script>
+		<script type="text/javascript" src="virtual_stick.js"></script>
+		<style>
+			#virtual_stick_left {
+				background: #999 url('stick.png');
+				background-position: 50% 50%;
+				background-repeat: no-repeat;
+			}
+		</style>
 	</head>
 <body>
 <div class="container-fluid">
 	<div class="row">
-		<div class="col-md-6">
+		<div class="col-md-6 col-xs-12">
 			<div id="videoFeed"></div>
+		</div>
+		<div class="col-md-4 col-xs-12">
+			<div id="virtual_stick_left" style="width:100%;"></div>
 		</div>
 	</div>
 </div>
@@ -21,7 +33,7 @@
 
 var FPS=30;
 var ws_video = false;
-var ws_telemetry = false; var telemetry_obj = document.getElementById("telemetryFeed");
+var ws_control = false;
 var c,ctx;
 var imgData = false;
 var h264_player = false;
@@ -40,8 +52,8 @@ function initVideoFeedReceive() {
 	ws_video.send("f");
 }
 
-function initTelemetryFeedReceive() {
-	ws_telemetry.send("t");
+function initControlFeedReceive() {
+	ws_control.send("t");
 }
 
 
@@ -65,7 +77,7 @@ function processFrame(imgString) {
 	}
 }
 
-function processTelemetry(data) {
+function processControl(data) {
 	//console.log(data);
 	//telemetry_obj.innerHTML = data.data;
 	//data = JSON.parse(data.data);
@@ -88,20 +100,20 @@ function connect() {
 		console.log("Error","Video", "reconnect", e);
 	}
 	
-	/*try {
-		ws_telemetry = new WebSocket("ws://"+host+":8082/");
-		ws_telemetry.onmessage = function (data) {
-			processTelemetry(data);
+	try {
+		ws_control = new WebSocket("ws://"+host+":8082/");
+		ws_control.onmessage = function (data) {
+			processControl(data);
 		};
-		ws_telemetry.onopen = function () {
-			initTelemetryFeedReceive();
+		ws_control.onopen = function () {
+			initControlFeedReceive();
 		};
-		ws_telemetry.onerror = function () {
-			ws_telemetry.close();
+		ws_control.onerror = function () {
+			ws_control.close();
 		}
 	} catch (e) {
-		console.log("Error","Telemetry", "reconnect");
-	}*/
+		console.log("Error","Control", "reconnect");
+	}
 }
 
 
@@ -129,25 +141,25 @@ function keyboardEvent(e) {
 	//console.log(kMap);
 	if (kMap.Space === true && (kMap.ShiftLeft === true || kMap.ShiftRight === true)) {
 		kMap.Space = false;
-		sendCmd("takeoff", 0);
+		sendCmd("start", 0);
 	} else if (kMap.Space === true) {
-		sendCmd("land", 0);
+		sendCmd("stop", 0);
 	}
 	if (kMap.KeyW === true || kMap.KeyA === true || kMap.KeyS === true || kMap.KeyD === true ||
 		kMap.ArrowUp === true || kMap.ArrowDown === true || kMap.ArrowLeft === true || kMap.ArrowRight === true) {
 		
 		stickData.yaw = speed*(kMap.KeyA === true?-1:(kMap.KeyD === true?1:0));
 		stickData.throttle = speed*(kMap.KeyS === true?-1:(kMap.KeyW === true?1:0));
-		stickData.roll = speed*(kMap.ArrowLeft === true?-1:(kMap.ArrowRight === true?1:0));
-		stickData.pitch = speed*(kMap.ArrowDown === true?-1:(kMap.ArrowUp === true?1:0));
+		//stickData.roll = speed*(kMap.ArrowLeft === true?-1:(kMap.ArrowRight === true?1:0));
+		//stickData.pitch = speed*(kMap.ArrowDown === true?-1:(kMap.ArrowUp === true?1:0));
 		
 		console.log(stickData);
 		sendCmd("stick", stickData);
 	} else {
 		stickData.yaw = 0;
 		stickData.throttle = 0;
-		stickData.roll = 0;
-		stickData.pitch = 0;
+		//stickData.roll = 0;
+		//stickData.pitch = 0;
 		console.log(stickData);
 		sendCmd("stick", stickData);
 	}
@@ -156,6 +168,21 @@ function keyboardEvent(e) {
 
 
 function initUI() {
+	initVirtualStick();
+}
+
+function initVirtualStick() {
+	var stick = new virtualStick().init(
+		document.getElementById("virtual_stick_left"),
+		function (x,y) {
+			stickData = {
+				throttle: y,
+				yaw: x,
+			};
+			console.log(stickData);
+			sendCmd("stick", stickData);
+		}
+	);
 }
 
 function initPing() {
@@ -189,8 +216,8 @@ function gamepadConnectHandler (e) {
 function gamepadDisconnectHandler (e) {
 	gamepadRemove(e.gamepad);
 	sendCmd("stick", {
-		roll     : 0,
-		pitch    : 0,
+		//roll     : 0,
+		//pitch    : 0,
 		throttle : 0,
 		yaw      : 0
 	});
@@ -235,24 +262,24 @@ function gamepadData() {
 	*/
 	
 	if (gp.buttons[0].pressed == true || gp.buttons[1].pressed == true || gp.buttons[2].pressed == true || gp.buttons[3].pressed == true ) {
-		sendCmd("land", 0);
+		sendCmd("start", 0);
 	} else if (gp.buttons[9].pressed == true) {
-		sendCmd("takeoff", 0);
+		sendCmd("stop", 0);
 	}
 		stickData.yaw = speed*gp.axes[0];
 		stickData.throttle = -speed*gp.axes[1];
-		stickData.roll = speed*gp.axes[2];
-		stickData.pitch = -speed*gp.axes[3];
+		//stickData.roll = speed*gp.axes[2];
+		//stickData.pitch = -speed*gp.axes[3];
 		sendCmd("stick", stickData);
 }
 
 
 initUI();
-//initKeyboard();
-//initGamepad();
+initKeyboard();
+initGamepad();
 initCanvas();
 //init3D();
-//initPing();
+initPing();
 connect();
 
 
