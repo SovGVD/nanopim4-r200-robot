@@ -16,6 +16,7 @@ var noderover_webclient = function () {
 			".js"   : { t:'application/javascript',   e:'utf8'   },
 			".wasm" : { t:'application/wasm',         e:'binary' },
 			".ico"  : { t:'image/x-icon',             e:'binary' },
+			".png"  : { t:'image/png',                e:'binary' },
 			".css"  : { t:'text/css',                 e:'utf8'   },
 			".map"  : { t:'application/json',         e:'utf8'   },
 		};
