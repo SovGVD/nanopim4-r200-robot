@@ -72,7 +72,7 @@ var noderover = function () {
 	this.motorsUpdate = function () {
 		var do_update = false;
 		for (var m = 0; m < 4; m++) {
-			if (this.motorsValue[this.motorsMapping[m]] != this.motorsPreValue[this.motorsMapping[m]]) {
+			//if (this.motorsValue[this.motorsMapping[m]] != this.motorsPreValue[this.motorsMapping[m]]) {
 				// value has been changed
 				if (this.motorsValue[this.motorsMapping[m]] == 0) {
 					this.motorHat.dcs[m].stop(this.cb_motorHat);
@@ -89,7 +89,7 @@ var noderover = function () {
 						}
 					}.bind(this, m, way, value));
 				}
-			}
+			//}
 		}
 	}
 
