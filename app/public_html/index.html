@@ -154,14 +154,14 @@ function keyboardEvent(e) {
 		//stickData.pitch = speed*(kMap.ArrowDown === true?-1:(kMap.ArrowUp === true?1:0));
 		
 		console.log(stickData);
-		sendCmd("stick", stickData);
+		sendCmd("move", stickData);
 	} else {
 		stickData.yaw = 0;
 		stickData.throttle = 0;
 		//stickData.roll = 0;
 		//stickData.pitch = 0;
 		console.log(stickData);
-		sendCmd("stick", stickData);
+		sendCmd("move", stickData);
 	}
 	return false;
 }
@@ -180,7 +180,7 @@ function initVirtualStick() {
 				yaw: x,
 			};
 			console.log(stickData);
-			sendCmd("stick", stickData);
+			sendCmd("move", stickData);
 		}
 	);
 }
@@ -196,8 +196,8 @@ function initPing() {
 }
 
 function sendCmd(_cmd, _value) {
-	if (ws_telemetry) {
-		ws_telemetry.send(JSON.stringify({ cmd: { cmd: _cmd, value: _value } }));
+	if (ws_control) {
+		ws_control.send(JSON.stringify({ cmd: { cmd: _cmd, value: _value } }));
 	}
 }
 
@@ -215,7 +215,7 @@ function gamepadConnectHandler (e) {
 
 function gamepadDisconnectHandler (e) {
 	gamepadRemove(e.gamepad);
-	sendCmd("stick", {
+	sendCmd("move", {
 		//roll     : 0,
 		//pitch    : 0,
 		throttle : 0,
@@ -270,7 +270,7 @@ function gamepadData() {
 		stickData.throttle = -speed*gp.axes[1];
 		//stickData.roll = speed*gp.axes[2];
 		//stickData.pitch = -speed*gp.axes[3];
-		sendCmd("stick", stickData);
+		sendCmd("move", stickData);
 }
 
 

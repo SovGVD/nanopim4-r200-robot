@@ -1,6 +1,6 @@
 {
   "name": "noderover",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "NodeRover based on nanopi m4 with rk3399",
   "main": "app.js",
   "directories": {
@@ -17,11 +17,17 @@
     "rk3399",
     "node.js",
     "video stream",
-    "h264"
+    "h264",
+    "FriendlyELEC NanoHat Motor"
   ],
   "author": "Gleb Devyatkin",
   "license": "MIT",
   "dependencies": {
-    "ws": "^5.2.1"
+    "ws": "^5.2.1",
+    "async": "^2.5.0",
+    "debug": "^4.0.0",
+    "i2c-bus": "^1.2.0",
+    "parambulator": "^1.5.2",
+    "sleep": "^5.1.0"
   }
 }
