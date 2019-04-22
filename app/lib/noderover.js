@@ -49,11 +49,11 @@ var noderover = function () {
 		this.failsafe_value = parseInt(this.failsafe_ok);
 		if (this._isset(data.cmd)) {
 			if (data.cmd.cmd == 'move') {
-				this.motorsValue.top_left     = this.limit(parseFloat(data.throttle) + parseFloat(data.yaw));
-				this.motorsValue.top_right    = this.limit(parseFloat(data.throttle) - parseFloat(data.yaw));
-				this.motorsValue.bottom_left  = this.limit(parseFloat(data.throttle) + parseFloat(data.yaw));
-				this.motorsValue.bottom_right = this.limit(parseFloat(data.throttle) - parseFloat(data.yaw));
-				this.motorsUpdate();			
+				this.motorsValue.top_left     = this.limit(parseFloat(data.cmd.value.throttle) + parseFloat(data.cmd.value.yaw));
+				this.motorsValue.top_right    = this.limit(parseFloat(data.cmd.value.throttle) - parseFloat(data.cmd.value.yaw));
+				this.motorsValue.bottom_left  = this.limit(parseFloat(data.cmd.value.throttle) + parseFloat(data.cmd.value.yaw));
+				this.motorsValue.bottom_right = this.limit(parseFloat(data.cmd.value.throttle) - parseFloat(data.cmd.value.yaw));
+				this.motorsUpdate();
 			} else if (data.cmd.cmd == 'ping') {
 				// TODO ???
 			}
@@ -83,20 +83,21 @@ var noderover = function () {
 						if (err) {
 							console.log("Error", "motor", m, way, value, err);
 						} else {
-							this.motorHat.dcs[m].setSpeed(100*value, this.cb_motorHat);
+							this.motorsPreValue[this.motorsMapping[m]] = value;
+							console.log("MOTOR", m, way, value);
+							this.motorHat.dcs[m].setSpeed(parseInt((way == 'fwd'?value:-value)*100), this.cb_motorHat);
 						}
-					}).bind(this, m, way, value);
+					}.bind(this, m, way, value));
 				}
 			}
 		}
-		this.motorsValue = this.motorsPreValue;
 	}
 
 	this.cb_motorHat = function(err, result) {
 		if (err) {
 			console.log('Oh no, there was an error');
 		} else {
-			// Move on..	
+			// Move on..
 		}
 	};
 	

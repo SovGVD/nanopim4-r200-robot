@@ -96,7 +96,7 @@ var virtualStick = function () {
 	
 	this.send = function () {
 		this.obj.style.backgroundPosition = (this.position.x + 1)*50 + "% " + (this.position.y + 1)*50 + "%";
-		this.callback(this.position.x, this.position.y);
+		this.callback(this.position.x, -this.position.y);
 	}
 	
 	this.updateHtml = function () {

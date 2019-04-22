@@ -16,6 +16,7 @@ var noderover_webclient = function () {
 			".js"   : { t:'application/javascript',   e:'utf8'   },
 			".wasm" : { t:'application/wasm',         e:'binary' },
 			".ico"  : { t:'image/x-icon',             e:'binary' },
+			".png"  : { t:'image/png',                e:'binary' },
 			".css"  : { t:'text/css',                 e:'utf8'   },
 			".map"  : { t:'application/json',         e:'utf8'   },
 		};
@@ -67,9 +68,9 @@ var noderover_webclient = function () {
 				this._ws_control_client = ws;
 				try {
 					if (message[0] == '{') {	// well... heh... this is JSON
-						console.log("CMD:", message);
+						//console.log("CMD:", message);
 						if (this.cb_control !== false) {
-							this.cb_control(message);
+							this.cb_control(JSON.parse(message));
 						}
 					} else {
 						console.log("WebClient", message);
